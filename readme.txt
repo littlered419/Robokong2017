@@ -1,1 +1,0 @@
-This is a tester readme file for Robokong 2017 repository.
