@@ -18,6 +18,12 @@ class Robot: public SampleRobot
 	const std::string autoNameDefault = "Default";
 	const std::string autoNameCustom = "My Auto";
 
+	DigitalInput *DI0;
+	DigitalInput *DI1;
+	Encoder *E0;
+
+	DriverStation *ds;
+
 public:
 	Robot() :
 			myRobot(0, 1),	// these must be initialized in the same order
@@ -26,6 +32,16 @@ public:
 	{
 		//Note SmartDashboard is not initialized here, wait until RobotInit to make SmartDashboard calls
 		myRobot.SetExpiration(0.1);
+//		DI0 = new DigitalInput(0);
+//		DI1 = new DigitalInput(1);
+		E0 = new Encoder(0,1,true,Encoder::EncodingType::k4X);
+		E0->SetMaxPeriod(.1);
+		E0->SetMinRate(10);
+		E0->SetDistancePerPulse(5);
+		E0->SetReverseDirection(false);
+		E0->SetSamplesToAverage(7);
+		E0->Reset();
+		ds = &DriverStation::GetInstance();
 	}
 
 	void RobotInit()
@@ -77,6 +93,11 @@ public:
 		myRobot.SetSafetyEnabled(true);
 		while (IsOperatorControl() && IsEnabled())
 		{
+			double d1;
+			d1=E0->GetRate();
+			SmartDashboard::PutNumber("Rate", d1);
+			SmartDashboard::PutNumber("Distance", E0->GetDistance());
+			SmartDashboard::PutBoolean("Alive", false);
 			myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
 			Wait(0.005);				// wait for a motor update time
 		}
