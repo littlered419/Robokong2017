@@ -39,6 +39,7 @@ class Robot: public frc::SampleRobot {
 	const std::string autoNameDefault = "Default";
 	frc::Encoder *E0;
 	frc::Encoder *E1;
+	BuiltInAccelerometer *Rio;
 	//frc::Accelerometer *Rio;
 
 	int AutoRead;
@@ -81,28 +82,7 @@ public:
 		E1->SetSamplesToAverage(7);
 		E1->Reset();
 
-		//Rio = new frc::Accelerometer::Range;
-		// Accelerometer Rio; // = new frc::Accelerometer;
-//		frc::Accelerometer *Rio;
-//		Rio =  frc::Accelerometer->
-//		double x = frc::Accelerometer::GetX();
-//		double x1 = frc::Accelerometer::GetX();
-//		double x2 = frc::BuiltInAccelerometer::GetX();
-//		frc::BuiltInAccelerometer ba = new frc::Accelerometer;
-//		Rio->GetX();
-//		Rio->GetY();
-//		Rio->GetZ();
-
-
-		frc::BuiltInAccelerometer ba;
-		frc::BuiltInAccelerometer
-
-		Accelerometer *accel;
-		accel = &frc::Accelerometer(frc::Accelerometer::kRange_4G);
-		double xVal = accel->GetX();
-		double yVal = accel->GetY();
-		double zVal = accel->GetZ();
-		//Rio->GetZ();
+		Rio = new BuiltInAccelerometer;
 
 		AutoRead = ((E0->GetDistance() + E1->GetDistance())/2)/2.33333333333333333333333333333333333333333333333333;
 
@@ -116,6 +96,7 @@ public:
 		//Reset both encoders
 		E0->Reset();
 		E1->Reset();
+
 
 	}//End robotInit
 
@@ -135,6 +116,9 @@ public:
 		auto autoSelected = chooser.GetSelected();
 		// std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", autoNameDefault);
 		std::cout << "Auto selected: " << autoSelected << std::endl;
+		double Xval = Rio->GetX();
+		double Yval = Rio->GetY();
+		double Zval = Rio->GetZ();
 
 		if (autoSelected == autoNameCustom) {
 			// Custom Auto goes here
@@ -171,7 +155,7 @@ public:
 			E0->Reset();
 			E1->Reset();
 
-			while(E0->GetDistance() > 180){
+			while(Xval < 180){
 				myRobot.TankDrive(-0.5, 0.5);
 			}
 
